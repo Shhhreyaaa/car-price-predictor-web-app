@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Car Price Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h1>🚗 Car Price Predictor</h1>
+        <p class="subtitle">AI-powered used car valuation</p>
+
+        <form action="/predict" method="post">
+
+            <label>Company</label>
+            <select name="company" id="company" required>
+                <option value="">Select Company</option>
+                {% for c in companies %}
+                <option value="{{ c }}">{{ c }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Model</label>
+            <select name="car_model" id="car_model" required>
+                <option value="">Select Model</option>
+            </select>
+
+            <label>Year of Purchase</label>
+            <select name="year" required>
+                {% for y in years %}
+                <option value="{{ y }}">{{ y }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Fuel Type</label>
+            <select name="fuel_type" required>
+                {% for f in fuels %}
+                <option value="{{ f }}">{{ f }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Kilometers Driven</label>
+            <input type="number" name="kilo_driven" placeholder="e.g. 50000" required>
+
+            <button type="submit">🚀 Predict Price</button>
+        </form>
+
+        {% if prediction %}
+        <div class="result">
+            Estimated Price: ₹{{ prediction }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+document.getElementById("company").addEventListener("change", function () {
+    const company = this.value;
+    const modelDropdown = document.getElementById("car_model");
+
+    modelDropdown.innerHTML = "<option>Loading...</option>";
+
+    fetch(`/get_models/${company}`)
+        .then(res => res.json())
+        .then(data => {
+            modelDropdown.innerHTML = "";
+            data.forEach(model => {
+                const option = document.createElement("option");
+                option.value = model;
+                option.textContent = model;
+                modelDropdown.appendChild(option);
+            });
+        });
+});
+</script>
+
+</body>
+</html>
