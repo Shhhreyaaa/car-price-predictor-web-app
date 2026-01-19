@@ -9,7 +9,7 @@ The project demonstrates the complete ML workflow — from data preprocessing to
 
 🤖 Machine Learning model training using Linear Regression
 
-💾 Model saving and loading using Pickle (.pkl)
+💾 Model saving and loading using Pickle <.pkl>
 
 🌐 Flask-based backend for real-time predictions
 
